@@ -1,0 +1,13 @@
+mybatis:
+  mapper-locations: classpath:/ch/example/test/mapper/*.xml
+  type-aliases-package: ch.example.test
+spring:
+  datasource:
+    username: root
+    password: 574193
+    url: jdbc:mysql://localhost:3306/coffee_db
+  driver-class-name: com.mysql.jdbc.Driver
+server:
+  port: 7077
+  servlet:
+    context-path: /test

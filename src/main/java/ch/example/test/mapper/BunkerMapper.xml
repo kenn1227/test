@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ch.example.test.mapper.BunkerMappper">
+    <resultMap id="bunkerMap" type="ch.example.test.bean.Bunker">
+        <id property="bunkerId" column="BUNKER_ID"/>
+        <result property="type" column="TYPE"/>
+        <result property="date" column="TIME"/>
+        <result property="machineId" column="MACHINE_ID"/>
+        <result property="materialId" column="MATERIAL_ID"/>
+        <result property="materialStock" column="MATERIAL_STOCK"/>
+        <result property="output" column="OUTPUT"/>
+    </resultMap>
+
+    <select id="selectMetiralStock" parameterType="java.util.HashMap" resultMap="bunkerMap">
+        SELECT MATERIAL_STOCK FROM machine_bunkers
+     <where>
+        <if test="machineId != null ">
+            MACHINE_ID = #{machineId}
+        </if>
+         <if test="materialId != null">
+             MATERIAL_ID = #{materialId}
+         </if>
+     </where>
+    </select>
+
+    <update id="updateMaterialStock" parameterType="int">
+        UPDATE machine_bunkers SET
+        <choose>
+            <when test="stock!=null">
+                MATERIAL_STOCK = #{stock}
+            </when>
+
+            <otherwise>
+                <if test="output!=null and output!=0">
+                    MATERIAL_STOCK = MATERIAL_STOCK-#{output}
+                </if>
+            </otherwise>
+        </choose>
+        <if test="materialId == null or materialId == 0">
+            MATERIAL_STOCK = 0 AND TYPE = 0
+        </if>
+    </update>
+
+</mapper>
